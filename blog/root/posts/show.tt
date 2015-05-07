@@ -1,0 +1,48 @@
+[% IF c.user_exists %]
+    Please Note: You are already logged in as '[% c.user.name %]'.
+    You can <a href="[% c.uri_for('/logout') %]">logout</a> here.
+[% ELSE %]
+    You need to log in to use this application.
+[% END %] 
+<br>
+
+
+[% META title = 'Add User' -%]
+title:[%  posts.title %]<br>
+body:[%  posts.body %]<br>
+<br>
+<h2>Comments</h2>
+[% FOREACH comment IN comments -%]
+<p>
+
+
+[% comment.body %]<br>
+
+<form method="post" action="[% c.uri_for(c.controller('posts').action_for('deletecomment1'),[posts.id ])%]">
+<table>
+
+<input type="hidden" name="id" value=[% comment.id%] >
+
+</table>
+<input type="submit" name="Submit" value="Delete">
+</form>
+
+
+
+
+
+
+</p>
+[% END -%]
+
+
+
+<form method="post" action="[% c.uri_for(c.controller('posts').action_for('createcomment'),[posts.id ])%]">
+<table>
+
+<tr><td>body:</td><td><textarea name="body"></textarea></td></tr>
+<tr><td><input type="hidden" name="user_id" value=[%c.user.id%]></td></tr>
+</table>
+<input type="submit" name="Submit" value="Submit">
+</form>
+

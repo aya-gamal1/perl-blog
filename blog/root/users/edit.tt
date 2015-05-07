@@ -1,0 +1,21 @@
+[% IF c.user_exists %]
+    Please Note: You are already logged in as '[% c.user.name %]'.
+    You can <a href="[% c.uri_for('/logout') %]">logout</a> here.
+[% ELSE %]
+    You need to log in to use this application.
+[% END %] 
+<br>
+
+
+[% META title = 'Add User' -%]
+<form method="post" action="[%  c.uri_for(c.controller('users').action_for('update'),[users.id ])  %]">
+<input type="hidden" name="id" value="[% users.id %]">
+<table>
+<tr><td>Username:<input type="text" name="name" value="[% users.name %]"></td>
+
+</tr>
+<tr><td>Email:<input type="text" name="email" value="[% users.email%]"></td></tr>
+<tr><td>Password:<input type="password" name="password" value="[% users.password%]"></td></tr>
+</table>
+<input type="submit" name="Submit" value="Submit">
+</form>

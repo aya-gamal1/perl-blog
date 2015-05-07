@@ -1,0 +1,26 @@
+[% # This is a TT comment. -%]
+[%- # Provide a title -%]
+[% META title = 'Users List' -%]
+[% # Note That the '-' at the beginning or end of TT code -%]
+[% # "chomps" the whitespace/newline at that end of the
+-%]
+[% # output (use View Source in browser to see the effect) -%]
+[% # Some basic HTML with a loop to display users -%]
+
+[% # Display each user in a table row %]
+<div class="container">
+[% FOREACH post IN posts -%]
+
+[% post.title %]<br>
+[% post.body %]<br>
+[%END%]
+[% FOREACH comment IN comments -%]
+<p>
+[% comment.id %]<br>
+
+[% comment.body %]<br>
+</p>
+[% END -%]
+
+
+</div>

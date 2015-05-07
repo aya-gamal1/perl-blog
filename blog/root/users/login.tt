@@ -1,0 +1,9 @@
+[% META title = 'Add User' -%]
+<form method="post" action="[% c.uri_for('login')%]">
+<table>
+
+<tr><td>Email:</td><td><input type="text" name="email"></td></tr>
+<tr><td>Password:</td><td><input type="password" name="password"></td></tr>
+</table>
+<input type="submit" name="Submit" value="Submit">
+</form>

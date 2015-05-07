@@ -1,0 +1,136 @@
+package blog::Controller::users;
+use Moose;
+use namespace::autoclean;
+use Digest::MD5;
+BEGIN { extends 'Catalyst::Controller'; }
+
+=head1 NAME
+
+blog::Controller::users - Catalyst Controller
+
+=head1 DESCRIPTION
+
+Catalyst Controller.
+
+=head1 METHODS
+
+=cut
+
+
+=head2 index
+
+=cut
+
+sub index :Path :Args(0) {
+    my ( $self, $c ) = @_;
+
+    $c->response->body('Matched blog::Controller::users in users.');
+}
+
+sub list :Local {
+my ($self, $c) = @_;
+$c->stash(users => [$c->model('DB::User')->all]);
+$c->stash(template => 'users/list.tt');
+}
+
+
+sub base :Chained('/') :PathPart('users'):CaptureArgs(0) {
+my ($self, $c) = @_;
+$c->stash(resultset => $c->model('DB::User'));
+
+}
+sub form_new :Chained('base') :PathPart('new')  {
+my ($self, $c) = @_;
+$c->stash(template => 'users/new.tt');
+}
+
+
+sub form_create_do :Chained('base') :PathPart('create') :Args(0) {
+my ($self, $c) = @_;
+
+my $username = $c->request->params->{name} || 'N/A';
+my $email = $c->request->params->{email} || 'N/A';
+my $password= $c->request->params->{password} || 'N/A';
+# Create the user
+my $user = $c->model('DB::User')->create({name => $username,email => $email,password => $password});
+#Digest::MD5::md5_hex($password)});
+# Store new model object in stash and set template
+$c->response->redirect($c->uri_for($self->action_for('list')));
+#$c->stash(user => $user,template => 'users/show.tt');
+}
+
+sub show :Chained('base') :PathPart('show')  {
+my ($self, $c) = @_;
+$c->stash(template => 'users/show.tt');
+}
+
+
+sub object :Chained('base') :PathPart('id') :CaptureArgs(1){
+
+my ($self, $c,$id) = @_;
+$c->stash(object=>$c->stash->{resultset}->find($id));
+
+}
+
+sub delete :Chained('object') :PathPart('delete') :Args(0) { 
+my ($self, $c) = @_;
+$c->stash->{object}->delete;
+$c->response->redirect($c->uri_for($self->action_for('list')));
+
+}
+
+
+sub show :Chained('object') :PathPart('show')  {
+my ($self, $c) = @_;
+$c->stash(users=>$c->stash->{object});
+$c->stash(template => 'users/show.tt');
+}
+
+sub edit :Chained('object') :PathPart('edit')  {
+my ($self, $c) = @_;
+$c->stash(users=>$c->stash->{object});
+$c->stash(template => 'users/edit.tt');
+}
+
+sub update :Chained('object') :PathPart('update')  {
+my ($self, $c) = @_;
+my $id = $c->request->params->{id} || 'N/A';
+$c->log->debug($id);
+my $username = $c->request->params->{name} || 'N/A';
+my $email = $c->request->params->{email} || 'N/A';
+my $password= $c->request->params->{password} || 'N/A';
+# Create the user
+ $c->stash->{object}->update(
+                        {
+					id 	=> $id,
+                                	name      =>      $username ,
+                                  	email     =>      $email,
+					password     =>      $password,
+       
+                });
+# Store new model object in stash and set template
+$c->response->redirect($c->uri_for($self->action_for('list')));
+#$c->stash(user => $user,template => 'users/show.tt');
+}
+sub form1 :Global{
+my ($self, $c) = @_;
+$c->stash(template => 'users/login.tt');
+
+}
+
+=encoding utf8
+
+=head1 AUTHOR
+
+aya,,,
+
+=head1 LICENSE
+
+This library is free software. You can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
+
+__PACKAGE__->meta->make_immutable;
+
+1;

@@ -1,0 +1,4 @@
+[% META title = 'Add User' -%]
+name:[%  users.name %]<br>
+password:[%  users.password %]<br>
+password:[%  users.email %]<br>

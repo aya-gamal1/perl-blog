@@ -1,0 +1,37 @@
+[% IF c.user_exists %]
+    Please Note: You are already logged in as '[% c.user.name %]'.
+    You can <a href="[% c.uri_for('/logout') %]">logout</a> here.
+[% ELSE %]
+    You need to log in to use this application.
+[% END %] 
+
+<a href="http://localhost:3000/users/list">list user</a><br>
+
+<br>
+
+[% # This is a TT comment. -%]
+[%- # Provide a title -%]
+[% META title = 'Users List' -%]
+[% # Note That the '-' at the beginning or end of TT code -%]
+[% # "chomps" the whitespace/newline at that end of the
+-%]
+[% # output (use View Source in browser to see the effect) -%]
+[% # Some basic HTML with a loop to display users -%]
+
+[% # Display each user in a table row %]
+[% FOREACH post IN posts -%]
+<p>
+[% post.id %]<br>
+<a href="[% c.uri_for(c.controller('posts').action_for('show'),[post.id]) %]">[% post.title %]</a><br>
+[% post.body %]
+
+<br>
+<a href="[% c.uri_for(c.controller('posts').action_for('edit'),[post.id]) %]">Edit</a><br>
+<a href="[% c.uri_for(c.controller('posts').action_for('delete'),[post.id]) %]">Delete</a><br>
+</p>
+
+
+[% END -%]
+<a href="[% c.uri_for(c.controller('posts').action_for('form_new')) %]">New post</a><br>
+
+
